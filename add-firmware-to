@@ -27,7 +27,6 @@
 #
  
 set -x
-BUILd_DIR=$(pwd)
 
 is_iso() {
    file "$1" | grep -q "ISO 9660"
@@ -58,6 +57,7 @@ initrd_append_fw() {
     local initrd="$1"
     local fwfile="$2"
     local outfile="$3"
+    local BUILD_DIR=$(pwd)
 
     local initrdtmp="$(mktemp -d)"
     gunzip < "$initrd" > "$initrdtmp/initrd"
@@ -113,6 +113,7 @@ if is_iso "$file"; then
     isotmp="$(mktemp -d)"
     tmpmnt="$isotmp/tmpmnt"
     buildtree="$isotmp/buildtree"
+    BUILD_DIR=$(pwd)
 
     mkdir "$tmpmnt"
     if am_root; then
@@ -149,7 +150,7 @@ if is_iso "$file"; then
     done
     
     isolinuxpath="$(cd $buildtree && find . -name isolinux.bin | head -1 | cut -b 3-)"
-    mkisofs -r -J -b "$isolinuxpath" -c boot.cat \
+    genisoimage -r -J -b "$isolinuxpath" -c boot.cat \
                 -no-emul-boot -boot-load-size 4 -boot-info-table \
                 -o "$outfile" "$buildtree"
     rm -rf "$isotmp"
