@@ -27,6 +27,7 @@
 #
  
 set -x
+BUILd_DIR=$(pwd)
 
 is_iso() {
    file "$1" | grep -q "ISO 9660"
@@ -70,7 +71,7 @@ initrd_append_fw() {
     done
 
     mkdir -p x/usr/share/graphics/
-    cp /home/yunohost/yunohost/extras/bandeau.png x/usr/share/graphics/logo_debian.png
+    cp $BUILD_DIR/extras/bandeau.png x/usr/share/graphics/logo_debian.png
 
     (cd x && find . | cpio -H newc -o) >> initrd
     cd -
@@ -137,10 +138,10 @@ if is_iso "$file"; then
     arch=`echo "$file" | cut -d"-" -f3`
     if [ $arch = "i386" ];
     then
-                cp -f /home/yunohost/yunohost/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg} $buildtree/isolinux/
+                cp -f $BUILD_DIR/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg} $buildtree/isolinux/
     else
 		rm $buildtree/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg}
-		cp -f /home/yunohost/yunohost/isolinux/{amdadgtk.cfg,amdadtxt.cfg,amdgtk.cfg,menu.cfg,stdmenu.cfg,amdtxt.cfg} $buildtree/isolinux/
+		cp -f $BUILD_DIR/isolinux/{amdadgtk.cfg,amdadtxt.cfg,amdgtk.cfg,menu.cfg,stdmenu.cfg,amdtxt.cfg} $buildtree/isolinux/
     fi
 
     for i in $(find "$buildtree" -name "initrd.gz" -o -name "initrd.img"); do
