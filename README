@@ -1,0 +1,19 @@
+Fully automated webservices installer
+* Mail server
+* Web syndication
+* Instant messaging
+* Calendar & contact synchonization
+* And More
+
+Open source components
+* Debian 
+* Postfix
+* Dovecot
+* OpenLDAP
+* Apache2
+* Ejabberd
+* LemonLDAP-NG
+
+
+How-to build
+http://wiki.yunohost.org/BuildCD
