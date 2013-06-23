@@ -1,0 +1,37 @@
+#!/bin/bash
+
+BUILD2="/home/yunohost/yunohostv2-amd64"
+BUILD="/home/yunohost/yunohostv2-i386"
+DATE=$(date +%m%d%y%H%M)
+
+function build-i386
+{
+cd $BUILD
+build-simple-cdd --dist wheezy --force-preseed --conf ./simple-cdd-i386.conf
+add-firmware-to images/debian-6.0.7-i386-CD-1.iso images/yunohostv2-$DATE-i386.iso wheezy
+rm images/debian-6.0.7-i386-CD-1.iso
+}
+
+function build-amd64
+{
+cd $BUILD2
+build-simple-cdd --dist wheezy --force-preseed --conf ./simple-cdd-amd64.conf
+add-firmware-to images/debian-7.1.0-amd64-CD-1.iso images/yunohostv2-$DATE-amd64.iso wheezy
+rm images/debian-6.0.7-amd64-CD-1.iso
+}
+
+
+if [[ "${1:-1}" = 1 ]]
+then
+	build-i386
+	build-amd64
+else
+	case $1 in
+	   i386) 
+		build-i386
+	   ;;
+	   amd64)
+		build-amd64
+           ;;
+	esac
+fi
