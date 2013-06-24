@@ -75,6 +75,3 @@ proftpd-basic	shared/proftpd/inetd_or_standalone	select standalone
 iptables-persistent     iptables-persistent/autosave_v6 boolean false
 iptables-persistent     iptables-persistent/autosave_v4 boolean false
 libnss-ldapd	libnss-ldapd/nsswitch multiselect group, passwd, shadow
-d-i preseed/late_command string \
-	cp cdrom/simple-cdd/.bashrc /target/root; \
-	cp cdrom/simple-cdd/.vimrc /target/root;
