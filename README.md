@@ -14,7 +14,7 @@ Installation
 ```
 wget http://build.yunohost.org/simple-cdd_0.3.14_all.deb
 sudo dpkg -i simple-cdd_0.3.14_all.deb
-sudo apt-get install -f genisoimage
+sudo apt-get install -f genisoimage qemu-kvm
 git clone git://github.com/YunoHost/cd_build.git
 ```
 

@@ -8,7 +8,7 @@ function build-i386
 {
 cd $BUILD
 build-simple-cdd --dist wheezy --force-preseed --conf ./simple-cdd-i386.conf
-add-firmware-to images/debian-7.0-i386-CD-1.iso images/yunohostv2-$DATE-i386.iso wheezy
+$(pwd)/add-firmware-to images/debian-7.0-i386-CD-1.iso images/yunohostv2-$DATE-i386.iso wheezy
 rm images/debian-7.0-i386-CD-1.iso
 }
 
@@ -16,7 +16,7 @@ function build-amd64
 {
 cd $BUILD2
 build-simple-cdd --dist wheezy --force-preseed --conf ./simple-cdd-amd64.conf
-add-firmware-to images/debian-7.0-amd64-CD-1.iso images/yunohostv2-$DATE-amd64.iso wheezy
+$(pwd)/add-firmware-to images/debian-7.0-amd64-CD-1.iso images/yunohostv2-$DATE-amd64.iso wheezy
 rm images/debian-7.0-amd64-CD-1.iso
 }
 
@@ -24,7 +24,7 @@ function build-amd64-test
 {
 cd $BUILD2
 build-simple-cdd --dist wheezy --force-preseed --conf ./simple-cdd-amd64-test.conf
-add-firmware-to images/debian-7.0-amd64-CD-1.iso images/yunohostv2-$DATE-amd64-test.iso wheezy
+$(pwd)/add-firmware-to images/debian-7.0-amd64-CD-1.iso images/yunohostv2-$DATE-amd64-test.iso wheezy
 rm images/debian-7.0-amd64-CD-1.iso
 }
 
