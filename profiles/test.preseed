@@ -1,0 +1,3 @@
+d-i apt-setup/local2/repository string \
+	http://repo.yunohost.org/ test main
+d-i apt-setup/local2/key string http://repo.yunohost.org/yunohost.asc
