@@ -12,10 +12,10 @@ Requirements
 Installation
 ------------
 ```
-wget http://build.yunohost.org/simple-cdd_0.3.14_all.deb
-sudo dpkg -i simple-cdd_0.3.14_all.deb
-sudo apt-get install -f genisoimage qemu-kvm
 git clone git://github.com/YunoHost/cd_build.git
+cd cd_build
+sudo dpkg -i ./simple-cdd_0.3.14_all.deb
+sudo apt-get install -f genisoimage qemu-kvm
 ```
 
 Some problems can occur at `dpkg -i` but keep going !
@@ -24,7 +24,6 @@ Some problems can occur at `dpkg -i` but keep going !
 Usage
 -----
 ```
-cd cd_build
 ./build-yunohost amd64
 ```
 
