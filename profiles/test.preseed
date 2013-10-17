@@ -40,14 +40,11 @@ d-i passwd/make-user boolean fasle
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 d-i apt-setup/local0/repository string \
-	http://repo.yunohost.org/ lemonldap main
-d-i apt-setup/local1/repository string \
 	http://repo.yunohost.org/ megusta main
-d-i apt-setup/local2/repository string \
+d-i apt-setup/local1/repository string \
 	http://repo.yunohost.org/ test main
-d-i apt-setup/local0/key string http://lemonldap-ng.org/_media/rpm-gpg-key-ow2
+d-i apt-setup/local0/key string http://repo.yunohost.org/yunohost.asc
 d-i apt-setup/local1/key string http://repo.yunohost.org/yunohost.asc
-d-i apt-setup/local2/key string http://repo.yunohost.org/yunohost.asc
 d-i debian-installer/allow_unauthenticated string true
 tasksel tasksel/first multiselect standard, web-server, ssh-server
 d-i pkgsel/include postfix yunohost
