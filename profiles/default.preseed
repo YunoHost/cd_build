@@ -1,3 +1,4 @@
+### Network configuration
 d-i netcfg/choose_interface select auto
 d-i netcfg/dhcp_failed note
 d-i netcfg/dhcp_options select Configure network manually
@@ -5,14 +6,20 @@ d-i netcfg/disable_dhcp boolean false
 d-i netcfg/get_hostname string yunohost
 d-i netcfg/get_domain string yunohost.org
 d-i netcfg/get_domain seen true
+
+### Mirror settings
 d-i mirror/country string manual
 d-i mirror/http/hostname string ftp.debian.org
 d-i mirror/http/directory string /debian
 d-i mirror/http/proxy string
+
+### Clock and time zone setup
 d-i clock-setup/utc boolean true
 d-i time/zone string Europe/Paris
 d-i clock-setup/ntp boolean true
 d-i clock-setup/ntp-server string 0.fr.pool.ntp.org
+
+### Partitioning
 d-i partman-auto/method string regular
 d-i partman-auto/choose_recipe select multi
 #d-i partman-auto/expert_recipe string                           \
@@ -35,40 +42,55 @@ d-i partman/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
 d-i partman/confirm boolean false
 d-i partman/confirm_nooverwrite boolean true
+
+### Account setup
 d-i passwd/root-password-crypted password $1$6xBdkGvE$8nLCNRxwABespdFJniEiX0
-d-i passwd/make-user boolean fasle
+d-i passwd/make-user boolean false
+
+### Base system installation
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 d-i apt-setup/local0/repository string \
-	http://repo.yunohost.org/ megusta main
+	http://repo.yunohost.org/debian/ jessie stable
 d-i apt-setup/local0/key string http://repo.yunohost.org/yunohost.asc
 d-i debian-installer/allow_unauthenticated string true
+
+### Package selection
 tasksel tasksel/first multiselect standard, web-server, ssh-server
-d-i pkgsel/include postfix yunohost
+d-i pkgsel/include string postfix yunohost yunohost-admin
+
+### Deactivate poll on popular packages
 popularity-contest popularity-contest/participate boolean false
+
 debconf debconf/frontend select Noninteractive
+
+### Boot loader installation
 d-i grub-installer/only_debian boolean true
 d-i grub-installer/with_other_os boolean true
+
+### Finishing up the installation
 d-i finish-install/reboot_in_progress note
 d-i cdrom-detect/eject boolean true
 d-i debian-installer/exit/reboot boolean true
-slapd slapd/domain string yunohost.org
-slapd shared/organization string yunohost
+
+### YunoHost Debconf (same than in yunohost/install_script)
 slapd slapd/password1 password yunohost
 slapd slapd/password2 password yunohost
-postfix	postfix/main_mailer_type	select Internet Site
+slapd slapd/domain string yunohost.org
+slapd shared/organization string yunohost.org
+slapd slapd/allow_ldap_v2 boolean false
+slapd slapd/invalid_config boolean true
+slapd slapd/backend select MDB
+postfix postfix/main_mailer_type select Internet Site
 postfix postfix/mailname string /etc/mailname
 mysql-server-5.5 mysql-server/root_password password yunohost
 mysql-server-5.5 mysql-server/root_password_again password yunohost
-samba-common samba-common/workgroup string WORKGROUP
-samba-common samba-common/workgroup boolean true
-nslcd	nslcd/ldap-bindpw	password	
-nslcd	nslcd/ldap-starttls	boolean	false
-nslcd	nslcd/ldap-reqcert	select	
-nslcd	nslcd/ldap-uris	string	ldap://localhost/
-nslcd	nslcd/ldap-binddn	string
-nslcd   nslcd/ldap-base  	string dc=yunohost,dc=org
-proftpd-basic	shared/proftpd/inetd_or_standalone	select standalone
-iptables-persistent     iptables-persistent/autosave_v6 boolean false
-iptables-persistent     iptables-persistent/autosave_v4 boolean false
-libnss-ldapd	libnss-ldapd/nsswitch multiselect group, passwd, shadow
+mariadb-server-10.0 mysql-server/root_password password yunohost
+mariadb-server-10.0 mysql-server/root_password_again password yunohost
+nslcd nslcd/ldap-bindpw password
+nslc nslcd/ldap-starttls boolean false
+nslcd nslcd/ldap-reqcert select
+nslcd nslcd/ldap-uris string ldap://localhost/
+nslcd nslcd/ldap-binddn string
+nslcd nslcd/ldap-base string dc=yunohost,dc=org
+libnss-ldapd libnss-ldapd/nsswitch multiselect group, passwd, shadow

@@ -1,4 +1,4 @@
-d-i netcfg/use_dhcp false
+d-i netcfg/use_dhcp boolean false
 d-i netcfg/choose_interface select auto
 d-i netcfg/disable_dhcp boolean true
 d-i netcfg/dhcp_failed note
@@ -23,7 +23,7 @@ d-i apt-setup/local0/repository string \
 d-i apt-setup/local0/key string http://repo.yunohost.org/yunohost.asc
 d-i debian-installer/allow_unauthenticated string true
 tasksel tasksel/first multiselect standard, web-server, ssh-server
-d-i pkgsel/include postfix yunohost
+d-i pkgsel/include string postfix yunohost
 popularity-contest popularity-contest/participate boolean false
 debconf debconf/frontend select Noninteractive
 d-i grub-installer/only_debian boolean true
@@ -31,23 +31,23 @@ d-i grub-installer/with_other_os boolean true
 d-i finish-install/reboot_in_progress note
 d-i cdrom-detect/eject boolean true
 d-i debian-installer/exit/reboot boolean true
-slapd slapd/domain string yunohost.org
-slapd shared/organization string yunohost
 slapd slapd/password1 password yunohost
 slapd slapd/password2 password yunohost
-postfix	postfix/main_mailer_type	select	Internet Site
+slapd slapd/domain string yunohost.org
+slapd shared/organization string yunohost.org
+slapd slapd/allow_ldap_v2 boolean false
+slapd slapd/invalid_config boolean true
+slapd slapd/backend select MDB
+postfix postfix/main_mailer_type select Internet Site
 postfix postfix/mailname string /etc/mailname
 mysql-server-5.5 mysql-server/root_password password yunohost
 mysql-server-5.5 mysql-server/root_password_again password yunohost
-samba-common samba-common/workgroup string WORKGROUP
-samba-common samba-common/workgroup boolean true
-nslcd	nslcd/ldap-bindpw	password	
-nslcd	nslcd/ldap-starttls	boolean	false
-nslcd	nslcd/ldap-reqcert	select	
-nslcd	nslcd/ldap-uris	string	ldap://localhost/
-nslcd	nslcd/ldap-binddn	string
-nslcd   nslcd/ldap-base  	string dc=yunohost,dc=org
-proftpd-basic	shared/proftpd/inetd_or_standalone	select standalone
-iptables-persistent     iptables-persistent/autosave_v6 boolean false
-iptables-persistent     iptables-persistent/autosave_v4 boolean false
-libnss-ldapd	libnss-ldapd/nsswitch multiselect group, passwd, shadow
+mariadb-server-10.0 mysql-server/root_password password yunohost
+mariadb-server-10.0 mysql-server/root_password_again password yunohost
+nslcd nslcd/ldap-bindpw password
+nslc nslcd/ldap-starttls boolean false
+nslcd nslcd/ldap-reqcert select
+nslcd nslcd/ldap-uris string ldap://localhost/
+nslcd nslcd/ldap-binddn string
+nslcd nslcd/ldap-base string dc=yunohost,dc=org
+libnss-ldapd libnss-ldapd/nsswitch multiselect group, passwd, shadow
