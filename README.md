@@ -19,7 +19,13 @@ sudo apt-get install -f simple-cdd enisoimage qemu-kvm
 Build an image
 ---------------
 ```
-build-simple-cdd --conf ./simple-cdd-amd64.conf
+./build-yunohost amd64
+```
+
+Or
+
+```
+./build-yunohost i386
 ```
 
 
@@ -32,16 +38,4 @@ This file doesn't contain password.
 
 ```
 sudo chmod o+r /var/cache/debconf/passwords.dat
-```
-
-Old how to
------
-```
-./build-yunohost amd64
-```
-
-Or
-
-```
-./build-yunohost i386
 ```
