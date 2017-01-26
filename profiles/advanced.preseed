@@ -1,36 +1,55 @@
-d-i netcfg/use_dhcp boolean false
+### Network configuration
 d-i netcfg/choose_interface select auto
-d-i netcfg/disable_dhcp boolean true
 d-i netcfg/dhcp_failed note
-d-i netcfg/get_hostname string yunohost
-d-i netcfg/get_domain string mondomaine.fr
-d-i netcfg/get_domain seen true
+d-i netcfg/disable_dhcp boolean true
+d-i netcfg/use_dhcp boolean false
+#d-i netcfg/get_hostname string yunohost
+#d-i netcfg/get_domain string mondomaine.fr
+#d-i netcfg/get_domain seen true
+
+### Mirror settings
 d-i mirror/country string manual
 d-i mirror/http/hostname string ftp.debian.org
 d-i mirror/http/directory string /debian
 d-i mirror/http/proxy string
 d-i mirror/http/proxy seen false
+
+### Clock and time zone setup
 d-i clock-setup/utc boolean true
 d-i time/zone string Europe/Paris
 d-i clock-setup/ntp boolean true
 d-i clock-setup/ntp-server string 0.fr.pool.ntp.org
+
+### Account setup
 d-i passwd/root-password-crypted password $1$6xBdkGvE$8nLCNRxwABespdFJniEiX0
-d-i passwd/make-user boolean fasle
+d-i passwd/make-user boolean false
+
+### Base system installation
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 d-i apt-setup/local0/repository string \
-	http://repo.yunohost.org/ megusta main
-d-i apt-setup/local0/key string http://repo.yunohost.org/yunohost.asc
-d-i debian-installer/allow_unauthenticated string true
+	http://repo.yunohost.org/debian/ jessie stable
+d-i apt-setup/local0/key string https://repo.yunohost.org/yunohost.asc
+#d-i debian-installer/allow_unauthenticated string true
+
+### Package selection
 tasksel tasksel/first multiselect standard, web-server, ssh-server
 d-i pkgsel/include string postfix yunohost
+
+### Deactivate poll on popular packages
 popularity-contest popularity-contest/participate boolean false
 debconf debconf/frontend select Noninteractive
+
+### Boot loader installation
 d-i grub-installer/only_debian boolean true
 d-i grub-installer/with_other_os boolean true
+
+### Finishing up the installation
 d-i finish-install/reboot_in_progress note
 d-i cdrom-detect/eject boolean true
 d-i debian-installer/exit/reboot boolean true
+
+### YunoHost Debconf (same than in yunohost/install_script)
 slapd slapd/password1 password yunohost
 slapd slapd/password2 password yunohost
 slapd slapd/domain string yunohost.org

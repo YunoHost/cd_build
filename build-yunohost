@@ -2,20 +2,20 @@
 
 DATE=$(date +%m%d%y%H%M)
 DIST='jessie'
-DEBNUM='8.0'
+DEBNUM='8.6'
 
 function build-i386
 {
 build-simple-cdd --dist $DIST --force-preseed --conf ./simple-cdd-i386.conf
-$(pwd)/add-firmware-to images/debian-$DEBNUM-i386-CD-1.iso images/yunohostv2-$DATE-i386.iso $DIST
+$(pwd)/add-firmware-to images/debian-$DEBNUM-i386-CD-1.iso images/yunohost-$DATE-i386.iso $DIST
 rm images/debian-$DEBNUM-i386-CD-1.iso
 rm images/debian-$DEBNUM-i386-CD-1.list.gz
 }
 
 function build-amd64
 {
-build-simple-cdd --dist $DIST --force-preseed --conf ./simple-cdd-amd64.conf
-$(pwd)/add-firmware-to images/debian-$DEBNUM-amd64-CD-1.iso images/yunohostv2-$DATE-amd64.iso $DIST
+build-simple-cdd --dist $DIST --conf ./simple-cdd-amd64.conf
+$(pwd)/add-firmware-to images/debian-$DEBNUM-amd64-CD-1.iso images/yunohost-$DATE-amd64.iso $DIST
 #rm images/debian-$DEBNUM-amd64-CD-1.iso
 #rm images/debian-$DEBNUM-amd64-CD-1.list.gz
 }
@@ -25,7 +25,7 @@ function build-amd64-test
 cp profiles/default.preseed profiles/old.default.preseed
 cp profiles/test.preseed profiles/default.preseed
 build-simple-cdd --dist $DIST --force-preseed --conf ./simple-cdd-amd64.conf
-$(pwd)/add-firmware-to images/debian-$DEBNUM-amd64-CD-1.iso images/yunohostv2-$DATE-amd64-test.iso $DIST
+$(pwd)/add-firmware-to images/debian-$DEBNUM-amd64-CD-1.iso images/yunohost-$DATE-amd64-test.iso $DIST
 rm images/debian-$DEBNUM-amd64-CD-1.iso
 rm images/debian-$DEBNUM-amd64-CD-1.list.gz
 mv profiles/old.default.preseed profiles/default.preseed

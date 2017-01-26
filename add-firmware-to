@@ -99,7 +99,7 @@ if [ -e "$outfile" ]; then
 fi
 
 suite="$3"
-if [ "$suite" != "lenny" ] && [ "$suite" != "squeeze" ]; then
+if [ "$suite" != "stretch" ] && [ "$suite" != "jessie" ]; then
     echo "Unrecognized suite $suite, trying anyway." >&2
 fi
 
