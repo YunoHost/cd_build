@@ -1,51 +1,61 @@
 #!/bin/bash
+# Usage ./build-yunohost [ARCH [DIST [DEB_DIST]]]
+# ARCH amd64|i386
+# DIST stable|testing
+# DEB_DIST jessie|stretch
 
 DATE=$(date +%m%d%y%H%M)
-DIST='jessie'
 DEBNUM='8.6'
 
-function build-i386
+
+
+# Build Yunohost iso for amd64 or i386 arch
+# Usage: build ARCH
+function build
 {
-build-simple-cdd --dist $DIST --force-preseed --conf ./simple-cdd-i386.conf
-$(pwd)/add-firmware-to images/debian-$DEBNUM-i386-CD-1.iso images/yunohost-$DATE-i386.iso $DIST
-rm images/debian-$DEBNUM-i386-CD-1.iso
-rm images/debian-$DEBNUM-i386-CD-1.list.gz
+    REPO_URL="http://repo.yunohost.org/debian/"
+    if [ "$DIST" = "testing" ] ; then
+        sed -i "s#$REPO_URL jessie stable#$REPO_URL $DEB_DIST stable testing#" profiles/*.preseed
+        sed -i "s#$REPO_URL stretch stable#$REPO_URL $DEB_DIST stable testing#" profiles/*.preseed
+    else
+        sed -i "s#$REPO_URL jessie stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
+        sed -i "s#$REPO_URL stretch stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
+    fi
+    build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$1.conf
+    $(pwd)/add-firmware-to images/debian-$DEBNUM-$1-CD-1.iso images/yunohost-$DEB_DIST-$DATE-$1-$DIST.iso $DEB_DIST
+    rm images/debian-$DEBNUM-$1-CD-1.iso
+    rm images/debian-$DEBNUM-$1-CD-1.list.gz
 }
 
-function build-amd64
+# Sign the new iso
+# Usage: sign ARCH
+function sign 
 {
-build-simple-cdd --dist $DIST --conf ./simple-cdd-amd64.conf
-$(pwd)/add-firmware-to images/debian-$DEBNUM-amd64-CD-1.iso images/yunohost-$DATE-amd64.iso $DIST
-#rm images/debian-$DEBNUM-amd64-CD-1.iso
-#rm images/debian-$DEBNUM-amd64-CD-1.list.gz
+    NAME="images/yunohost-$DEB_DIST-$DATE-$1-$DIST.iso"
+    gpg --output $NAME.sig --detach-sig $NAME
+    sha256sum $NAME > images/SHA256SUM
 }
 
-function build-amd64-test
+function build_and_sign
 {
-cp profiles/default.preseed profiles/old.default.preseed
-cp profiles/test.preseed profiles/default.preseed
-build-simple-cdd --dist $DIST --force-preseed --conf ./simple-cdd-amd64.conf
-$(pwd)/add-firmware-to images/debian-$DEBNUM-amd64-CD-1.iso images/yunohost-$DATE-amd64-test.iso $DIST
-rm images/debian-$DEBNUM-amd64-CD-1.iso
-rm images/debian-$DEBNUM-amd64-CD-1.list.gz
-mv profiles/old.default.preseed profiles/default.preseed
+    build $1
+    sign $1
 }
 
 rm -r $(pwd)/tmp
+DIST=$2
+if [[ "${2:-1}" = 1 ]]; then
+    DIST='stable'
+fi
+DEB_DIST=$3
+if  [[ "${3:-1}" = 1 ]]; then
+    DEB_DIST='jessie'
+fi
+
 if [[ "${1:-1}" = 1 ]]
 then
-	build-i386
-	build-amd64
+	build_and_sign i386
+	build_and_sign amd64
 else
-	case $1 in
-	   i386) 
-		build-i386
-	   ;;
-	   amd64)
-		build-amd64
-           ;;
-           test)
-		build-amd64-test
-           ;;
-	esac
+    build_and_sign $1
 fi
