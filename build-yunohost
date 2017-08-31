@@ -5,7 +5,7 @@
 # DEB_DIST jessie|stretch
 
 DATE=$(date +%m%d%y%H%M)
-DEBNUM='8.6'
+DEBNUM='8.9'
 
 
 
