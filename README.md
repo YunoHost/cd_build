@@ -13,7 +13,7 @@ Installation
 ```
 git clone git://github.com/YunoHost/cd_build.git
 cd cd_build
-sudo apt-get install -f simple-cdd enisoimage qemu-kvm
+sudo apt-get install -f simple-cdd genisoimage qemu-kvm
 ```
 
 Build an image
