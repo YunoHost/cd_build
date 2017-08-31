@@ -18,6 +18,7 @@ sudo apt-get install -f simple-cdd genisoimage qemu-kvm
 
 Build an image
 ---------------
+Important: Be sure your system is up to date, if no you will see "missing packages" error during the script.
 ```
 ./build-yunohost amd64
 ```
