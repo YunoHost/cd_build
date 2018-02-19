@@ -30,6 +30,7 @@ function build
     YNH_VERSION=$(grep "^Package: yunohost$" --after-context=1 Packages | grep "Version" | awk '{print $2;}')
     rm Packages
 
+    rm -f images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso
     $(pwd)/add-firmware-to images/debian-$DEBNUM-$ARCH-CD-1.iso images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso $DEB_DIST
     rm images/debian-$DEBNUM-$ARCH-CD-1.iso
     rm images/debian-$DEBNUM-$ARCH-CD-1.list.gz
@@ -47,12 +48,12 @@ function sign
 
 function build_and_sign
 {
+    rm -r $(pwd)/tmp
+
     local ARCH="$1"
     build $ARCH
     sign $ARCH
 }
-
-rm -r $(pwd)/tmp
 
 DIST="${2:-stable}"
 DEB_DIST="${3:-$DEFAULT_DEB_DIST}"
