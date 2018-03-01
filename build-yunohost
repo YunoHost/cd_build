@@ -4,14 +4,23 @@
 # DIST stable|testing
 # DEB_DIST jessie|stretch
 
-DEFAULT_DEB_DIST="jessie"
+readonly DEFAULT_DEB_DIST="jessie"
+readonly REPO_URL="http://repo.yunohost.org/debian/"
+
+readonly ARCH_CHOICE=$1
+readonly DIST="${2:-stable}"
+readonly DEB_DIST="${3:-$DEFAULT_DEB_DIST}"
+
+source ./common.sh
 
 # Build Yunohost iso for amd64 or i386 arch
 # Usage: build ARCH
 function build
 {
     local ARCH="$1"
-    REPO_URL="http://repo.yunohost.org/debian/"
+
+    info "Starting build for arch $ARCH ..."
+
     if [ "$DIST" = "testing" ] ; then
         sed -i "s#$REPO_URL jessie stable#$REPO_URL $DEB_DIST stable testing#" profiles/*.preseed
         sed -i "s#$REPO_URL stretch stable#$REPO_URL $DEB_DIST stable testing#" profiles/*.preseed
@@ -22,18 +31,20 @@ function build
     build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
 
     # Find the release version of debian
-    DEBNUM="$(grep "Version:" tmp/${DEB_DIST}_Release | awk '{print $2;}')"
+    local DEBNUM="$(grep "Version:" tmp/${DEB_DIST}_Release | awk '{print $2;}')"
 
     # Find the release version of YunoHost
     wget ${REPO_URL}dists/${DEB_DIST}/${DIST}/binary-i386/Packages.gz
     gunzip Packages.gz
     YNH_VERSION=$(grep "^Package: yunohost$" --after-context=1 Packages | grep "Version" | awk '{print $2;}')
-    rm Packages
+    rm -f Packages
 
     rm -f images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso
     $(pwd)/add-firmware-to images/debian-$DEBNUM-$ARCH-CD-1.iso images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso $DEB_DIST
-    rm images/debian-$DEBNUM-$ARCH-CD-1.iso
-    rm images/debian-$DEBNUM-$ARCH-CD-1.list.gz
+    rm -f images/debian-$DEBNUM-$ARCH-CD-1.iso
+    rm -f images/debian-$DEBNUM-$ARCH-CD-1.list.gz
+    success "The image should now be available in images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
+
 }
 
 # Sign the new iso
@@ -41,27 +52,33 @@ function build
 function sign
 {
     local ARCH="$1"
-    NAME="images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
+    local NAME="images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
+    
+    info "Signing image $NAME ..."
+    
     gpg --output $NAME.sig --detach-sig $NAME
     sha256sum $NAME > $NAME.sum
 }
 
 function build_and_sign
 {
-    rm -r $(pwd)/tmp
-
     local ARCH="$1"
+    
+    rm -r $(pwd)/tmp
     build $ARCH
     sign $ARCH
 }
 
-DIST="${2:-stable}"
-DEB_DIST="${3:-$DEFAULT_DEB_DIST}"
+function main
+{
+    if [ -z "$ARCH_CHOICE" ]
+    then
+        info "No arch chosen, will build both i396 and amd64"
+        build_and_sign i386
+        build_and_sign amd64
+    else
+        build_and_sign $ARCH_CHOICE
+    fi
+}
 
-if [ -z "$1" ]
-then
-    build_and_sign i386
-    build_and_sign amd64
-else
-    build_and_sign $1
-fi
+main
