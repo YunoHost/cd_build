@@ -111,28 +111,10 @@ fi
 
 if is_iso "$file"; then
     isotmp="$(mktemp -d)"
-    tmpmnt="$isotmp/tmpmnt"
     buildtree="$isotmp/buildtree"
     BUILD_DIR=$(pwd)
 
-    mkdir "$tmpmnt"
-    if am_root; then
-	MOUNT="mount"
-	UMOUNT="umount"
-    elif [ -x /usr/bin/sudo ]; then
-	echo "Attempting to use sudo to gain mount capabilities..."
-	MOUNT="sudo mount"
-	UMOUNT="sudo umount"
-    else
-	echo "WARNING: Couldn't find sudo and not running as root." >&2
-	echo "WARNING: Trying to loopback mount the iso anyway..." >&2
-	MOUNT="mount"
-	UMOUNT="umount"
-    fi
-    $MOUNT "$file" "$tmpmnt" -o loop
-    cp -a "$tmpmnt" "$buildtree"
-    $UMOUNT "$tmpmnt"
-    rmdir "$tmpmnt"
+    xorriso -osirrox on -indev "$file" -extract / "$buildtree"
 
     chmod -R u+w "$buildtree"
 
