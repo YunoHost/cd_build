@@ -123,7 +123,7 @@ if is_iso "$file"; then
     then
                 cp -f $BUILD_DIR/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg} $buildtree/isolinux/
     else
-		rm $buildtree/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg}
+		rm -f $buildtree/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg}
 		cp -f $BUILD_DIR/isolinux/{amdadgtk.cfg,amdadtxt.cfg,amdgtk.cfg,menu.cfg,stdmenu.cfg,amdtxt.cfg} $buildtree/isolinux/
     fi
 
@@ -147,4 +147,4 @@ isohybrid $outfile
 
 echo "Output in $outfile"
 
-rm "$fwfile"
+rm -f "$fwfile"
