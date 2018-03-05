@@ -74,6 +74,9 @@ function sign
 
     info "Signing image $NAME ..."
 
+    # Remove previous signature to prevent gpg to ask about overwriting
+    rm -f $NAME.sig
+
     sudo gpg --output $NAME.sig --detach-sig $NAME
     sha256sum $NAME > $NAME.sum
 }
