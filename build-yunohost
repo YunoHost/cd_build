@@ -28,23 +28,41 @@ function build
         sed -i "s#$REPO_URL jessie stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
         sed -i "s#$REPO_URL stretch stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
     fi
+
+    # Build a simple/regular debian CD image ?
     build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
 
     # Find the release version of debian
     local DEBNUM="$(grep "Version:" tmp/${DEB_DIST}_Release | awk '{print $2;}')"
 
     # Find the release version of YunoHost
-    wget ${REPO_URL}dists/${DEB_DIST}/${DIST}/binary-i386/Packages.gz
+    info "Finding out current YunoHost's stable vesion number"
+    wget -q ${REPO_URL}dists/${DEB_DIST}/${DIST}/binary-i386/Packages.gz
     gunzip Packages.gz
     YNH_VERSION=$(grep "^Package: yunohost$" --after-context=1 Packages | grep "Version" | awk '{print $2;}')
     rm -f Packages
 
-    rm -f images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso
-    $(pwd)/add-firmware-to images/debian-$DEBNUM-$ARCH-CD-1.iso images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso $DEB_DIST
-    rm -f images/debian-$DEBNUM-$ARCH-CD-1.iso
-    rm -f images/debian-$DEBNUM-$ARCH-CD-1.list.gz
-    success "The image should now be available in images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
+    local CD_STUFF="images/debian-$DEBNUM-$ARCH-CD"
 
+    # build-simple-cdd is stupid and doesn't name its output correctly -.- ...
+    mv images/debian-*-$ARCH-CD-1.iso $CD_STUFF.iso
+    mv images/debian-*-$ARCH-CD-1.list.gz $CD_STUFF.list.gz
+
+    local OUTPUT="images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
+
+    [ -e "$CD_STUFF.iso" ] \
+        || critical "Expected to find $CD_STUFF.iso but it's not here ?"
+
+    rm -f $OUTPUT
+
+    $(pwd)/add-firmware-to $CD_STUFF.iso $OUTPUT $DEB_DIST
+
+    rm -f $CD_STUFF.iso
+    rm -f $CD_STUFF.list.gz
+
+    [ -e $OUTPUT ] \
+        && success "The image should now be available in $OUTPUT" \
+        || critical "Something wrong happened when build the image :|"
 }
 
 # Sign the new iso
@@ -57,14 +75,16 @@ function sign
     info "Signing image $NAME ..."
     
     gpg --output $NAME.sig --detach-sig $NAME
+
     sha256sum $NAME > $NAME.sum
 }
 
 function build_and_sign
 {
     local ARCH="$1"
-    
-    rm -r $(pwd)/tmp
+
+    rm -rf $(pwd)/tmp
+    rm -rf $(pwd)/images/debian*
     build $ARCH
     sign $ARCH
 }

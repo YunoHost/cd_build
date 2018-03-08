@@ -29,15 +29,24 @@ function info()
 function warn()
 {
   local msg=${1}
-  echo " "
-  echo "[${BOLD}${ORANGE}WARN${NORMAL}] ${msg}"
-  echo " "
+  echo " " 2>&1
+  echo "[${BOLD}${ORANGE}WARN${NORMAL}] ${msg}" 2>&1
+  echo " " 2>&1
 }
 
 function error()
 {
   local msg=${1}
-  echo " "
-  echo "[${BOLD}${RED}FAIL${NORMAL}] ${msg}" 
-  echo " "
+  echo " " 2>&1
+  echo "[${BOLD}${RED}FAIL${NORMAL}] ${msg}"  2>&1
+  echo " " 2>&1
+}
+
+function critical()
+{
+  local msg=${1}
+  echo " " 2>&1
+  echo "[${BOLD}${RED}CRIT${NORMAL}] ${msg}"  2>&1
+  echo " " 2>&1
+  exit 1
 }
