@@ -77,7 +77,8 @@ function sign
     # Remove previous signature to prevent gpg to ask about overwriting
     rm -f $NAME.sig
 
-    sudo gpg --output $NAME.sig --detach-sig $NAME
+    gpg --output $NAME.sig --detach-sig $NAME
+
     sha256sum $NAME > $NAME.sum
 }
 
@@ -91,15 +92,8 @@ function build_and_sign
     sign $ARCH
 }
 
-function assert_not_root
-{
-    [[ $EUID -ne 0 ]] || critical "You should not run this script as root !"
-}
-
 function main
 {
-    assert_not_root
-
     if [ -z "$ARCH_CHOICE" ]
     then
         info "No arch chosen, will build both i396 and amd64"
