@@ -71,9 +71,12 @@ function sign
 {
     local ARCH="$1"
     local NAME="images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
-    
+
     info "Signing image $NAME ..."
-    
+
+    # Remove previous signature to prevent gpg to ask about overwriting
+    rm -f $NAME.sig
+
     gpg --output $NAME.sig --detach-sig $NAME
 
     sha256sum $NAME > $NAME.sum
