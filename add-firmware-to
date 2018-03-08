@@ -142,6 +142,9 @@ if is_initrd "$file"; then
     initrd_append_fw "$file" "$fwfile" "$outfile"
 fi
 
+# Add MBR/EFI stuff to make iso bootable with dd / Etcher ...
+isohybrid $outfile
+
 echo "Output in $outfile"
 
 rm -f "$fwfile"
