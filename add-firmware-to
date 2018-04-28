@@ -29,7 +29,7 @@
 set -x
 
 is_iso() {
-   file "$1" | grep -q "ISO 9660"
+   file "$1" | grep -q "ISO 9660\|DOS/MBR boot sector"
 }
 
 is_initrd() {
