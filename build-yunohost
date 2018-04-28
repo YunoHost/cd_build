@@ -71,13 +71,16 @@ function sign
 {
     local ARCH="$1"
     local NAME="images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
-
+    
     info "Signing image $NAME ..."
+    
+    gpg --output $NAME.sig --detach-sig $NAME
 
     # Remove previous signature to prevent gpg to ask about overwriting
     rm -f $NAME.sig
 
     sudo gpg --output $NAME.sig --detach-sig $NAME
+    
     sha256sum $NAME > $NAME.sum
 }
 
@@ -93,7 +96,7 @@ function build_and_sign
 
 function main
 {
-
+    
     if [ -z "$ARCH_CHOICE" ]
     then
         info "No arch chosen, will build both i396 and amd64"
