@@ -30,7 +30,7 @@ function build
     fi
 
     # Build a simple/regular debian CD image ?
-    build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
+    sudo -u yunohost build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
 
     # Find the release version of debian
     local DEBNUM="$(grep "Version:" tmp/${DEB_DIST}_Release | awk '{print $2;}')"
@@ -74,6 +74,9 @@ function sign
 
     info "Signing image $NAME ..."
 
+    # Remove previous signature to prevent gpg to ask about overwriting
+    rm -f $NAME.sig
+
     sudo gpg --output $NAME.sig --detach-sig $NAME
     sha256sum $NAME > $NAME.sum
 }
@@ -88,14 +91,8 @@ function build_and_sign
     sign $ARCH
 }
 
-function assert_not_root
-{
-    [[ $EUID -ne 0 ]] || critical "You should not run this script as root !"
-}
-
 function main
 {
-    assert_not_root
 
     if [ -z "$ARCH_CHOICE" ]
     then

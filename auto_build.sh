@@ -7,7 +7,7 @@ repo_url="http://repo.yunohost.org/debian/"
 
 build_yunohost_org_dir="/var/www/build"
 
-iso_directory="$script_dir"
+iso_directory="/var/www/build"
 old_iso_directory="$iso_directory/releases_archive"
 mkdir -p "$old_iso_directory"
 
@@ -21,10 +21,10 @@ get_ynh_release () {
 
 build_new_version () {
 	local arch="$1"
-	echo -e "\n$(date)" >> "$script_dir/ynh_build.log"
-	echo ">>> Build a new iso for YunoHost $dist on $deb_dist $arch" | tee -a "$script_dir/ynh_build.log"
+	echo -e "\n$(date)" >> "/var/log/build_yunohost/ynh_build.log"
+	echo ">>> Build a new iso for YunoHost $dist on $deb_dist $arch" | tee -a "/var/log/build_yunohost/ynh_build.log"
 	(cd "$script_dir"
-	./build-yunohost $arch $dist $deb_dist 2>&1 | tee -a "$script_dir/ynh_build.log"
+	./build-yunohost $arch $dist $deb_dist 2>&1 | tee -a "/var/log/build_yunohost/ynh_build.log"
 	)
 
 	# Move the old iso in another directory
