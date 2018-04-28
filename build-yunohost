@@ -30,7 +30,7 @@ function build
     fi
 
     # Build a simple/regular debian CD image ?
-    build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
+    sudo -u yunohost build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
 
     # Find the release version of debian
     local DEBNUM="$(grep "Version:" tmp/${DEB_DIST}_Release | awk '{print $2;}')"
@@ -77,15 +77,15 @@ function sign
     # Remove previous signature to prevent gpg to ask about overwriting
     rm -f $NAME.sig
 
-    gpg --output $NAME.sig --detach-sig $NAME
-
+    sudo gpg --output $NAME.sig --detach-sig $NAME
+    
     sha256sum $NAME > $NAME.sum
 }
 
 function build_and_sign
 {
     local ARCH="$1"
-    
+
     rm -rf $(pwd)/tmp
     rm -rf $(pwd)/images/debian*
     
@@ -95,6 +95,7 @@ function build_and_sign
 
 function main
 {
+    
     if [ -z "$ARCH_CHOICE" ]
     then
         info "No arch chosen, will build both i396 and amd64"
