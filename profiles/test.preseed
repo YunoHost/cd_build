@@ -40,11 +40,11 @@ d-i passwd/make-user boolean fasle
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 d-i apt-setup/local0/repository string \
-	http://repo.yunohost.org/ megusta main
+	http://forge.yunohost.org/ stretch stable
 d-i apt-setup/local1/repository string \
-	http://repo.yunohost.org/ test main
-d-i apt-setup/local0/key string http://repo.yunohost.org/yunohost.asc
-d-i apt-setup/local1/key string http://repo.yunohost.org/yunohost.asc
+	http://forge.yunohost.org/ stretch stable
+d-i apt-setup/local0/key string http://forge.yunohost.org/yunohost.asc
+d-i apt-setup/local1/key string http://forge.yunohost.org/yunohost.asc
 d-i debian-installer/allow_unauthenticated string true
 tasksel tasksel/first multiselect standard, web-server, ssh-server
 d-i pkgsel/include postfix yunohost

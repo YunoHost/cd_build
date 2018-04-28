@@ -69,8 +69,8 @@ d-i apt-setup/services-select multiselect security, updates
 d-i apt-setup/security_host string security.debian.org
 
 d-i apt-setup/local0/repository string \
-	http://repo.yunohost.org/debian/ jessie stable
-d-i apt-setup/local0/key string http://repo.yunohost.org/debian/yunohost.asc
+	http://forge.yunohost.org/debian/ stretch stable
+d-i apt-setup/local0/key string http://forge.yunohost.org/yunohost.asc
 d-i apt-setup/local0/comment string YunoHost repository
 #d-i debian-installer/allow_unauthenticated string true
 

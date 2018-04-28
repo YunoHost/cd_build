@@ -3,7 +3,7 @@
 # Get the script directory
 script_dir="$(dirname $(realpath $0))"
 
-repo_url="http://repo.yunohost.org/debian/"
+repo_url="http://forge.yunohost.org/debian/"
 
 build_yunohost_org_dir="/var/www/build"
 
@@ -59,7 +59,7 @@ compare_version () {
 	fi
 }
 
-deb_dist=jessie
+deb_dist=stretch
 dist=stable
 compare_version "$(get_ynh_release)"
 
