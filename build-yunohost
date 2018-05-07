@@ -75,7 +75,7 @@ function sign
     # Remove previous signature to prevent gpg to ask about overwriting
     rm -f $NAME.sig
 
-    sudo gpg --output $NAME.sig --detach-sig $NAME
+    sudo gpg --armor --output $NAME.sig --detach-sig $NAME
     
     sha256sum $NAME > $NAME.sum
 }
