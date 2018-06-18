@@ -27,6 +27,8 @@ function build
         sed -i "s#$REPO_URL stretch stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
     fi
 
+    rm -rf ./tmp
+
     # Build a simple/regular debian CD image ?
     sudo -u yunohost build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
 
@@ -63,44 +65,16 @@ function build
         || critical "Something wrong happened when build the image :|"
 }
 
-# Sign the new iso
-# Usage: sign ARCH
-function sign
-{
-    local ARCH="$1"
-    local NAME="images/yunohost-$DEB_DIST-$YNH_VERSION-$ARCH-$DIST.iso"
-
-    info "Signing image $NAME ..."
-
-    # Remove previous signature to prevent gpg to ask about overwriting
-    rm -f $NAME.sig
-
-    sudo gpg --output $NAME.sig --detach-sig $NAME
-    
-    sha256sum $NAME > $NAME.sum
-}
-
-function build_and_sign
-{
-    local ARCH="$1"
-
-    rm -rf $(pwd)/tmp
-    rm -rf $(pwd)/images/debian*
-    
-    build $ARCH
-    sign $ARCH
-}
-
 function main
 {
     
     if [ -z "$ARCH_CHOICE" ]
     then
         info "No arch chosen, will build both i396 and amd64"
-        build_and_sign i386
-        build_and_sign amd64
+        build i386
+        build amd64
     else
-        build_and_sign $ARCH_CHOICE
+        build $ARCH_CHOICE
     fi
 }
 

@@ -23,26 +23,25 @@ build_new_version () {
 	local arch="$1"
 	echo -e "\n$(date)" >> "/var/log/build_yunohost/ynh_build.log"
 	echo ">>> Build a new iso for YunoHost $dist on $deb_dist $arch" | tee -a "/var/log/build_yunohost/ynh_build.log"
-	(cd "$script_dir"
+	(cd "$script_dir";
 	./build-yunohost $arch $dist $deb_dist 2>&1 | tee -a "/var/log/build_yunohost/ynh_build.log"
 	)
 
-	# Move the old iso in another directory
-	mv "$script_dir/images/yunohost-$deb_dist-$old_version-$arch-$dist".{iso,iso.sig,iso.sum} "$old_iso_directory"
 	# And put at its place the new iso
 	local image_name="yunohost-$deb_dist-$new_version-$arch-$dist"
-	mv "$script_dir/images/$image_name".{iso,iso.sig,iso.sum} "$iso_directory"
+	mv "$script_dir/images/$image_name.iso" "$iso_directory"
 
-	# Modify the links on build.yunohost.org
-	if [ "$dist" = "stable" ]
-	then	# Stable
-		sed --in-place "s@\(<a href=\".*\)yunohost-.*iso\(\">Stable $arch</a> | <a href=\"\).*sig\(\">pgp</a> - <a href=\"\).*sum\(\">sha512</a><br>\)@ \
-		\1$image_name.iso\2$image_name.iso.sig\3$image_name.iso.sum\4@" \
-		"$build_yunohost_org_dir/index.html"
-	else	# Testing
-		sed --in-place "s@\(<a href=\".*\)yunohost-.*iso\(\">Testing $arch</a> | <a href=\"\).*sig\(\">pgp</a> - <a href=\"\).*sum\(\">sha512</a><br>\)@ \
-		\1$image_name.iso\2$image_name.iso.sig\3$image_name.iso.sum\4@" \
-		"$build_yunohost_org_dir/index.html"
+	# Update the images.json (will also sign it, and move the old image in release_archives)
+	if [[ $dist == "stable" ]];
+	then
+		if [[ $arch == "i386" ]];
+		then
+		   sudo /var/www/build/update-images.py regularcomputer32 $new_version $image_name.iso
+		   sudo /var/www/build/update-images.py virtualbox32      $new_version $image_name.iso
+		else
+		   sudo /var/www/build/update-images.py regularcomputer64 $new_version $image_name.iso
+		   sudo /var/www/build/update-images.py virtualbox64      $new_version $image_name.iso
+		fi
 	fi
 }
 
@@ -63,5 +62,7 @@ deb_dist=stretch
 dist=stable
 compare_version "$(get_ynh_release)"
 
-dist=testing
-compare_version "$(get_ynh_release)"
+# Disabling for now as it's causing some issues (not reverting the changes in .preseed)
+# Not sure we really need those anyway :s
+#dist=testing
+#compare_version "$(get_ynh_release)"
