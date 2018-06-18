@@ -27,7 +27,8 @@ function build
         sed -i "s#$REPO_URL stretch stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
     fi
 
-    rm -rf ./tmp
+    rm -rf $(pwd)/tmp
+    rm -rf $(pwd)/images/debian*
 
     # Build a simple/regular debian CD image ?
     sudo -u yunohost build-simple-cdd --dist $DEB_DIST --conf ./simple-cdd-$ARCH.conf
