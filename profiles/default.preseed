@@ -114,3 +114,4 @@ nslcd nslcd/ldap-binddn string
 nslcd nslcd/ldap-base string dc=yunohost,dc=org
 libnss-ldapd libnss-ldapd/nsswitch multiselect group, passwd, shadow
 postsrsd postsrsd/domain string yunohost.org
+apt-cdrom-setup apt-setup/cdrom/set-next    boolean false
