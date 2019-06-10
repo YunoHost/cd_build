@@ -47,7 +47,9 @@ d-i apt-setup/local0/key string http://forge.yunohost.org/yunohost.asc
 d-i apt-setup/local1/key string http://forge.yunohost.org/yunohost.asc
 d-i debian-installer/allow_unauthenticated string true
 tasksel tasksel/first multiselect standard, ssh-server
-d-i pkgsel/include yunohost
+# Keep postfix in here, otherwise exim4 might get installed and create a weird
+# conflict...
+d-i pkgsel/include string postfix yunohost
 popularity-contest popularity-contest/participate boolean false
 debconf debconf/frontend select Noninteractive
 d-i grub-installer/only_debian boolean true
