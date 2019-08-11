@@ -31,11 +31,11 @@ d-i partman-lvm/confirm boolean true
 d-i partman-auto-lvm/guided_size string max
 d-i partman-auto/expert_recipe string                         \
       boot-root ::                                            \
-              128 256 256 ext3                                \
+              128 256 256 ext4                                \
                       $primary{ }                             \
                       $bootable{ }                            \
                       method{ format } format{ }              \
-                      use_filesystem{ } filesystem{ ext3 }    \
+                      use_filesystem{ } filesystem{ ext4 }    \
                       mountpoint{ /boot }                     \
               .                                               \
               512 1024 1024 linux-swap                        \
@@ -43,11 +43,11 @@ d-i partman-auto/expert_recipe string                         \
                       lv_name{ swap }                         \
                       method{ swap } format{ }                \
               .                                               \
-              4096 4096 1000000000 ext3                        \
+              4096 4096 1000000000 ext4                       \
                       $lvmok{ }                               \
                       lv_name{ root }                         \
                       method{ format } format{ }              \
-                      use_filesystem{ } filesystem{ ext3 }    \
+                      use_filesystem{ } filesystem{ ext4 }    \
                       mountpoint{ / }                         \
               .
 
