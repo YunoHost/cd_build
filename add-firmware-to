@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 #
 # add-firmware-to: Add non-free firmware to Debian install media
 #
@@ -25,7 +25,7 @@
 #              to add other archs upon request
 # 2008.??.?? - Initial creation, just works on initrds
 #
- 
+
 set -x
 
 is_iso() {
@@ -99,7 +99,7 @@ if [ -e "$outfile" ]; then
 fi
 
 suite="$3"
-if [ "$suite" != "stretch" ] && [ "$suite" != "jessie" ]; then
+if [ "$suite" != "buster" ] && [ "$suite" != "stretch" ] && [ "$suite" != "jessie" ]; then
     echo "Unrecognized suite $suite, trying anyway." >&2
 fi
 
@@ -130,7 +130,7 @@ if is_iso "$file"; then
     for i in $(find "$buildtree" -name "initrd.gz" -o -name "initrd.img"); do
 	initrd_append_fw "$i" "$fwfile" "$i"
     done
-    
+
     isolinuxpath="$(cd $buildtree && find . -name isolinux.bin | head -1 | cut -b 3-)"
     genisoimage -r -J -b "$isolinuxpath" -c boot.cat \
                 -no-emul-boot -boot-load-size 4 -boot-info-table \

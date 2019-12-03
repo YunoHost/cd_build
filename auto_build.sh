@@ -58,7 +58,7 @@ compare_version () {
 	fi
 }
 
-deb_dist=stretch
+deb_dist=buster
 dist=stable
 compare_version "$(get_ynh_release)"
 
