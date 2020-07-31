@@ -2,9 +2,9 @@
 # Usage ./build-yunohost [ARCH [DIST [DEB_DIST]]]
 # ARCH amd64|i386
 # DIST stable|testing
-# DEB_DIST stretch
+# DEB_DIST buster
 
-readonly DEFAULT_DEB_DIST="stretch"
+readonly DEFAULT_DEB_DIST="buster"
 readonly REPO_URL="http://forge.yunohost.org/debian/"
 
 readonly ARCH_CHOICE=$1
@@ -22,9 +22,9 @@ function build
     info "Starting build for arch $ARCH ..."
 
     if [ "$DIST" = "testing" ] ; then
-        sed -i "s#$REPO_URL stretch stable#$REPO_URL $DEB_DIST stable testing#" profiles/*.preseed
+        sed -i "s#$REPO_URL buster stable#$REPO_URL $DEB_DIST stable testing#" profiles/*.preseed
     else
-        sed -i "s#$REPO_URL stretch stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
+        sed -i "s#$REPO_URL buster stable testing#$REPO_URL $DEB_DIST stable#" profiles/*.preseed
     fi
 
     rm -rf $(pwd)/tmp
