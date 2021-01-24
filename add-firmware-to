@@ -67,7 +67,7 @@ initrd_append_fw() {
     tar xfz "$fwfile"
     mkdir x
     for file in *deb; do
-	dpkg-deb -x "$file" x
+        dpkg-deb -x "$file" x
     done
 
     mkdir -p x/usr/share/graphics/
@@ -118,17 +118,18 @@ if is_iso "$file"; then
 
     chmod -R u+w "$buildtree"
 
+    cp $BUILD_DIR/menu.cfg $buildtree/isolinux/
+
     arch=`echo "$file" | cut -d"-" -f3`
     if [ $arch = "i386" ];
     then
-                cp -f $BUILD_DIR/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg} $buildtree/isolinux/
+        sed -i 's/__ARCH__/386/g' $buildtree/isolinux/menu.cfg
     else
-		rm -f $buildtree/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg}
-		cp -f $BUILD_DIR/isolinux/{amdadgtk.cfg,amdadtxt.cfg,amdgtk.cfg,menu.cfg,stdmenu.cfg,amdtxt.cfg} $buildtree/isolinux/
+        sed -i 's/__ARCH__/amd/g' $buildtree/isolinux/menu.cfg
     fi
 
     for i in $(find "$buildtree" -name "initrd.gz" -o -name "initrd.img"); do
-	initrd_append_fw "$i" "$fwfile" "$i"
+        initrd_append_fw "$i" "$fwfile" "$i"
     done
 
     isolinuxpath="$(cd $buildtree && find . -name isolinux.bin | head -1 | cut -b 3-)"

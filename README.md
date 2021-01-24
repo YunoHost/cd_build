@@ -23,6 +23,12 @@ Or
 ./build-yunohost i386
 ```
 
+Install process configuration
+-----------------------------
+
+- menu.cfg doc: https://wiki.syslinux.org/wiki/index.php?title=Menu
+- Preseed configuration doc: https://www.debian.org/releases/stable/s390x/apb.en.html
+
 
 Troubleshooting
 ---------------
