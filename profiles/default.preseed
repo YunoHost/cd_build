@@ -14,24 +14,11 @@ d-i mirror/http/proxy string
 
 ### Localization
 
-# Set default answers to question, but set them as "false" so that they're asked anyway
-d-i debian-installer/language string en
-d-i debian-installer/language seen false
-
-d-i debian-installer/country string GB
-d-i debian-installer/country seen false
-
-d-i debian-installer/locale string en_GB.UTF-8
-d-i debian-installer/locale seen false
-
 d-i time/zone string Europe/Paris
 d-i time/zone seen false
 d-i clock-setup/utc boolean true
 d-i clock-setup/ntp boolean true
 d-i clock-setup/ntp-server string 0.fr.pool.ntp.org
-
-d-i keyboard-configuration/xkb-keymap select us
-d-i keyboard-configuration/xkb-keymap seen false
 
 ### Partitioning
 d-i partman-auto/method string lvm
