@@ -15,8 +15,6 @@ d-i mirror/http/proxy string
 ### Localization
 
 # Set default answers to question, but set them as "false" so that they're asked anyway
-# This prevent for example the default country to be "United States" and having to search
-# for Europe -> Paris in "Other" ...
 d-i debian-installer/language string en
 d-i debian-installer/language seen false
 
