@@ -53,7 +53,7 @@ To easily reproduce and investigate the issue, it's easier to manually create a 
 apt install cdebootstrap -y
 cd /root/
 mkdir mychroot
-cdebootstrap --arch=amd64 buster ./mychroot/ http://deb.debian.org/debian/
+cdebootstrap --arch=amd64 bullseye ./mychroot/ http://deb.debian.org/debian/
 mount -t proc none ./mychroot/proc
 mount -o bind /dev ./mychroot/dev
 chroot ./mychroot/ bash
