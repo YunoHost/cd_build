@@ -1,3 +1,7 @@
+# :warning: This repo is archived, superseded by https://github.com/YunoHost/custom-debian-iso
+
+---
+
 CD Build tools
 ==============
 
